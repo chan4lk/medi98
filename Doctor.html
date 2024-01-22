@@ -12,9 +12,9 @@
             background-color: #f5f5f5;
             color: #333;
             display: grid;
-            gap: 20px;
+            gap: 10px;
             align-items: center;
-            height: 100vh;
+            height: 50vh;
         }
 
         header {
@@ -25,19 +25,16 @@
         }
 
         main {
-            max-width: 800px;
-            width: 100%;
-            margin: 0 auto; /* Center the content */
-            height: 80vh; /* Set a fixed height */
-            overflow: hidden; /* Hide overflow to disable scrolling */
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: grid;
+            gap: 20px;
+            grid-template-columns: 1fr 1fr;
+            max-width: 1000px;
+            margin: 0 auto;
         }
 
         form {
             display: grid;
-            gap: 10px;
+            gap: 5px;
         }
 
         label {
@@ -61,17 +58,19 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            margin-right: 10px;
         }
 
         button:hover {
             background-color: #45a049;
         }
 
+        #medicineList {
+            grid-column: 1;
+        }
+
         #prescriptionList {
-            margin-top: 20px;
-            grid-column: 2; 
-            text-align: center; 
+            grid-column: 2;
+            text-align: center;
         }
 
         .prescription-details {
@@ -91,8 +90,55 @@
             padding: 0;
             margin: 0;
         }
+
+        #downloadPrintButtons {
+    grid-column: 1 / span 2; /* Span two columns to cover both sides */
+    text-align: left; /* Align the button to the left */
+    
+}
+
+
+        #printContainer {
+            display: none; /* Initially hide the print container */
+        }
+
+        /* Define print styles */
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            main {
+                display: block;
+                width: 100%;
+            }
+
+            #downloadPrintButtons {
+                display: none; /* Hide download and print buttons in print */
+            }
+
+            #printContainer {
+                display: block;
+                width: 100%;
+            }
+
+            #printedPrescriptionList {
+                display: block;
+                width: 100%;
+            }
+
+            .prescription-details {
+                page-break-before: always; /* Start a new page for each prescription details */
+            }
+
+            .medicine-container {
+                display: block;
+                width: 100%;
+                border: none;
+            }
+        }
     </style>
-    <script src="https://rawgit.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
 </head>
 <body>
     <header>
@@ -107,20 +153,35 @@
             
             <label for="patientAge">Age:</label>
             <input type="number" id="patientAge" required>
-            <button type="button" onclick="addMedicine()">Add Medicine</button>
-
+            
+            <label for="medicine">Choose Medicine:</label>
             <div id="medicineList"></div>
 
+            <button type="button" onclick="addMedicine()">Add Medicine</button>
+            <button type="button" onclick="addPrescription()">Add Prescription</button>
+            <button type="button" onclick="clearForm()">Clear</button>
         </form>
 
         <div id="prescriptionList">
+            <!-- Display prescription details here -->
         </div>
-        <button type="button" onclick="addPrescription()">Add Prescription</button>
 
-        <button type="button" onclick="downloadPDF()">Download PDF</button>
-        <button type="button" onclick="printPrescription()">Print Prescription</button>
+        <div id="downloadPrintButtons" style="display: none;">
+            <button type="button" onclick="printPrescription()">Print Prescription</button>
+        </div>
     </main>
 
+    <!-- Container for printing -->
+    <div id="printContainer">
+        <div id="printedPrescriptionList">
+            <!-- Display printed prescription details here -->
+        </div>
+    </div>
+
+    <!-- Container for printing user input results only -->
+    <div id="printUserInputResultsContainer"></div>
+
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
     <script>
         const drugNames = ['Aspirin', 'Paracetamol', 'Ibuprofen', 'Lisinopril', 'Simvastatin', 'Metformin'];
 
@@ -128,7 +189,10 @@
         const patientAgeInput = document.getElementById('patientAge');
         const medicineListContainer = document.getElementById('medicineList');
         const prescriptionList = document.getElementById('prescriptionList');
+        const printedPrescriptionList = document.getElementById('printedPrescriptionList');
         const currentDateTimeContainer = document.getElementById('currentDateTime');
+
+        let patientDetailsAdded = false;
 
         updateCurrentDateTime();
 
@@ -152,12 +216,21 @@
             tabletCountInput.required = true;
 
             const foodInstructionsSelect = document.createElement('select');
-            const foodOptions = ['Before', 'After', 'No Matter'];
+            const foodOptions = ['Before Meal', 'After Meal'];
             foodOptions.forEach(option => {
                 const foodOption = document.createElement('option');
                 foodOption.value = option.toLowerCase();
                 foodOption.textContent = option;
                 foodInstructionsSelect.appendChild(foodOption);
+            });
+
+            const medInstructionsSelect = document.createElement('select');
+            const medOptions = ['Every 6 Hours', 'Every 8 Hours'];
+            medOptions.forEach(option => {
+                const medOption = document.createElement('option');
+                medOption.value = option.toLowerCase();
+                medOption.textContent = option;
+                medInstructionsSelect.appendChild(medOption);
             });
 
             const removeButton = document.createElement('button');
@@ -171,6 +244,7 @@
             medicineContainer.appendChild(suggestionsList);
             medicineContainer.appendChild(tabletCountInput);
             medicineContainer.appendChild(foodInstructionsSelect);
+            medicineContainer.appendChild(medInstructionsSelect);
             medicineContainer.appendChild(removeButton);
 
             medicineListContainer.appendChild(medicineContainer);
@@ -185,6 +259,12 @@
         }
 
         function addPrescription() {
+            if (patientDetailsAdded) {
+                alert("Patient Details Can Only be Added Once.");
+                return;
+            }
+            
+
             const patientName = patientNameInput.value.trim();
             const patientAge = patientAgeInput.value.trim();
 
@@ -194,11 +274,12 @@
                 prescriptionItem.classList.add('prescription-details');
 
                 prescriptionItem.innerHTML = `<p>Patient: ${patientName}, Age: ${patientAge}</p>`;
-                
+
                 medicines.forEach((medicine, index) => {
                     const drugName = medicine.querySelector('input').value.trim();
                     const tabletCount = medicine.querySelector('input[type="number"]').value.trim();
                     const foodInstructions = medicine.querySelector('select').value;
+                    const medInstructions = medicine.querySelector('select:nth-child(5)').value;
 
                     if (drugName !== '' && tabletCount !== '') {
                         prescriptionItem.innerHTML += `
@@ -206,32 +287,70 @@
                             <p>Drug: ${drugName}</p>
                             <p>Tablet Count: ${tabletCount}</p>
                             <p>Food: ${foodInstructions}</p>
+                            <p>Frequency: ${medInstructions}</p>
                         `;
                     }
+                     // Show the "Print Prescription" button after adding a prescription
+            const downloadPrintButtons = document.getElementById('downloadPrintButtons');
+            downloadPrintButtons.style.display = 'block';
                 });
 
                 prescriptionList.appendChild(prescriptionItem);
 
+                // Create a copy of the prescription for printing
+                const printedPrescriptionItem = prescriptionItem.cloneNode(true);
+                printedPrescriptionList.innerHTML = '';
+                printedPrescriptionList.appendChild(printedPrescriptionItem);
+
                 medicineListContainer.innerHTML = '';
 
+                // Scroll prescription list to the top when a new prescription is added
                 prescriptionList.scrollTop = 0;
+
+                // Set the flag to indicate patient details have been added
+                patientDetailsAdded = true;
             }
+            
         }
-
-        function downloadPDF() {
-            const pdfOptions = {
-                margin: 10,
-                filename: 'prescription.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-
-            html2pdf().from(prescriptionList).set(pdfOptions).outputPdf();
-        }
+        
 
         function printPrescription() {
-            window.print();
+            // Clone the prescription content for printing
+            const printedPrescriptionContent = document.getElementById('printedPrescriptionList').innerHTML;
+
+            // Append the content to the print container
+            const printContainer = document.getElementById('printUserInputResultsContainer');
+            printContainer.innerHTML = printedPrescriptionContent;
+
+            // Use html2canvas to capture the content as an image
+            html2canvas(printContainer, {
+                allowTaint: true,
+                useCORS: true
+            }).then(canvas => {
+                // Convert the canvas to a data URL
+                const dataURL = canvas.toDataURL();
+
+                // Create a new window for printing
+                const printWindow = window.open();
+                printWindow.document.write('<html><head><title>Print</title></head><body>');
+                printWindow.document.write('<img src="' + dataURL + '" />');
+                printWindow.document.write('</body></html>');
+
+                // Print the new window
+                printWindow.print();
+                printWindow.close();
+            });
+
+            // Clear the content in the print container
+            printContainer.innerHTML = '';
+        }
+
+        function clearForm() {
+            document.getElementById('prescriptionForm').reset();
+            medicineListContainer.innerHTML = '';
+            prescriptionList.innerHTML = '';
+            printedPrescriptionList.innerHTML = '';
+            patientDetailsAdded = false;
         }
 
         function updateCurrentDateTime() {
@@ -253,10 +372,12 @@
             });
         }
 
+       
+
         function handleSuggestionClick(event, input, suggestionsList) {
             if (event.target.tagName === 'LI') {
                 input.value = event.target.textContent;
-                suggestionsList.innerHTML = ''; 
+                suggestionsList.innerHTML = '';
             }
         }
     </script>
