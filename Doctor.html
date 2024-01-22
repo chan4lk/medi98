@@ -92,17 +92,15 @@
         }
 
         #downloadPrintButtons {
-    grid-column: 1 / span 2; /* Span two columns to cover both sides */
-    text-align: left; /* Align the button to the left */
-    
+    grid-column: 1 / span 2; 
+    text-align: left; 
 }
 
 
         #printContainer {
-            display: none; /* Initially hide the print container */
+            display: none; 
         }
 
-        /* Define print styles */
         @media print {
             body {
                 margin: 0;
@@ -115,7 +113,7 @@
             }
 
             #downloadPrintButtons {
-                display: none; /* Hide download and print buttons in print */
+                display: none; 
             }
 
             #printContainer {
@@ -129,8 +127,7 @@
             }
 
             .prescription-details {
-                page-break-before: always; /* Start a new page for each prescription details */
-            }
+                page-break-before: always;  }
 
             .medicine-container {
                 display: block;
@@ -163,7 +160,6 @@
         </form>
 
         <div id="prescriptionList">
-            <!-- Display prescription details here -->
         </div>
 
         <div id="downloadPrintButtons" style="display: none;">
@@ -171,14 +167,11 @@
         </div>
     </main>
 
-    <!-- Container for printing -->
     <div id="printContainer">
         <div id="printedPrescriptionList">
-            <!-- Display printed prescription details here -->
         </div>
     </div>
 
-    <!-- Container for printing user input results only -->
     <div id="printUserInputResultsContainer"></div>
 
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
@@ -290,24 +283,20 @@
                             <p>Frequency: ${medInstructions}</p>
                         `;
                     }
-                     // Show the "Print Prescription" button after adding a prescription
             const downloadPrintButtons = document.getElementById('downloadPrintButtons');
             downloadPrintButtons.style.display = 'block';
                 });
 
                 prescriptionList.appendChild(prescriptionItem);
 
-                // Create a copy of the prescription for printing
                 const printedPrescriptionItem = prescriptionItem.cloneNode(true);
                 printedPrescriptionList.innerHTML = '';
                 printedPrescriptionList.appendChild(printedPrescriptionItem);
 
                 medicineListContainer.innerHTML = '';
 
-                // Scroll prescription list to the top when a new prescription is added
                 prescriptionList.scrollTop = 0;
 
-                // Set the flag to indicate patient details have been added
                 patientDetailsAdded = true;
             }
             
@@ -315,33 +304,26 @@
         
 
         function printPrescription() {
-            // Clone the prescription content for printing
             const printedPrescriptionContent = document.getElementById('printedPrescriptionList').innerHTML;
 
-            // Append the content to the print container
             const printContainer = document.getElementById('printUserInputResultsContainer');
             printContainer.innerHTML = printedPrescriptionContent;
 
-            // Use html2canvas to capture the content as an image
             html2canvas(printContainer, {
                 allowTaint: true,
                 useCORS: true
             }).then(canvas => {
-                // Convert the canvas to a data URL
                 const dataURL = canvas.toDataURL();
 
-                // Create a new window for printing
                 const printWindow = window.open();
                 printWindow.document.write('<html><head><title>Print</title></head><body>');
                 printWindow.document.write('<img src="' + dataURL + '" />');
                 printWindow.document.write('</body></html>');
 
-                // Print the new window
                 printWindow.print();
                 printWindow.close();
             });
 
-            // Clear the content in the print container
             printContainer.innerHTML = '';
         }
 
