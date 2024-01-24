@@ -194,6 +194,7 @@
         </form>
 
         <div id="prescriptionList">
+            <!-- Display prescription details here -->
         </div>
 
         <div id="downloadPrintButtons" style="display: none;">
@@ -203,6 +204,7 @@
 
     <div id="printContainer">
         <div id="printedPrescriptionList">
+            <!-- Display printed prescription details here -->
         </div>
     </div>
 
@@ -252,7 +254,7 @@
             });
 
             const medInstructionsSelect = document.createElement('select');
-            const medOptions = ['Every 6 Hours', 'Every 8 Hours'];
+            const medOptions = ['Every 1 Hours', 'Every 2 Hours','Every 3 Hours', 'Every 4 Hours','Every 5 Hours', 'Every 6 Hours','Every 7 Hours', 'Every 8 Hours'];
             medOptions.forEach(option => {
                 const medOption = document.createElement('option');
                 medOption.value = option.toLowerCase();
@@ -299,11 +301,17 @@
                 const prescriptionItem = document.createElement('div');
                 prescriptionItem.classList.add('prescription-details');
 
-                prescriptionItem.innerHTML = `
-                    <table>
-                        <tr>
-                            <th colspan="3">Patient: ${patientName}, Age: ${patientAge}</th>
-                        </tr>
+                const prescriptionTable = document.createElement('table');
+                prescriptionTable.innerHTML = `
+                    <tr>
+                        <th colspan="4" style="text-align: center;">Patient: ${patientName}, Age: ${patientAge}</th>
+                    </tr>
+                    <tr>
+                        <th style="text-align: center;">Drug Name</th>
+                        <th style="text-align: center;">Tablet Count</th>
+                        <th style="text-align: center;">Meal Instructions</th>
+                        <th style="text-align: center;">Frequency</th>
+                    </tr>
                 `;
 
                 medicines.forEach((medicine, index) => {
@@ -313,33 +321,17 @@
                     const medInstructions = medicine.querySelector('select:nth-child(5)').value;
 
                     if (drugName !== '' && tabletCount !== '') {
-                        prescriptionItem.innerHTML += `
-                            <tr>
-                                <td>Medicine ${index + 1}</td>
-                                <td>Drug:</td>
-                                <td>${drugName}</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>Tablet Count:</td>
-                                <td>${tabletCount}</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>Food:</td>
-                                <td>${foodInstructions}</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>Frequency:</td>
-                                <td>${medInstructions}</td>
-                            </tr>
+                        const newRow = prescriptionTable.insertRow(-1);
+                        newRow.innerHTML = `
+                            <td style="text-align: center;">${drugName}</td>
+                            <td style="text-align: center;">${tabletCount}</td>
+                            <td style="text-align: center;">${foodInstructions}</td>
+                            <td style="text-align: center;">${medInstructions}</td>
                         `;
                     }
                 });
 
-                prescriptionItem.innerHTML += `</table>`;
-
+                prescriptionItem.appendChild(prescriptionTable);
                 prescriptionList.appendChild(prescriptionItem);
 
                 const downloadPrintButtons = document.getElementById('downloadPrintButtons');
@@ -352,6 +344,8 @@
                 patientDetailsAdded = true;
             }
         }
+
+    
 
         function printPrescription() {
             const printedPrescriptionContent = document.getElementById('printedPrescriptionList').innerHTML;
