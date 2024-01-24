@@ -4,30 +4,34 @@ body {
     padding: 0;
     background-color: #f5f5f5;
     color: #333;
-    display: grid;
-    gap: 10px;
-    align-items: start;
-    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
 }
 
 header {
-    background-color: #4CAF50;
-    color: white;
+    background-color: #f5f5f5;
+    color: rgb(46, 61, 60);
     padding: 1em;
     text-align: center;
+    width: 100%;
 }
 
 main {
-    display: grid;
-    gap: 20px;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     max-width: 1000px;
-    margin: 0 auto;
+    margin: 20px;
 }
 
 form {
     display: grid;
-    gap: 5px;
+    gap: 10px;
+    width: 100%;
+    max-width: 400px;
 }
 
 label {
@@ -35,9 +39,10 @@ label {
 }
 
 input,
-select {
+select,
+button {
     width: 100%;
-    padding: 8px;
+    padding: 10px;
     box-sizing: border-box;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -46,16 +51,14 @@ select {
 }
 
 button {
-    background-color: #4CAF50;
+    background-color: #8094df;
     color: white;
-    padding: 10px 15px;
     border: none;
-    border-radius: 4px;
     cursor: pointer;
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #87cde9;
 }
 
 #medicineList,
@@ -142,7 +145,6 @@ button:hover {
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
 }
 
 table,
@@ -158,6 +160,46 @@ td {
 }
 
 th {
+    background-color: #96d0df;
+    color: rgb(0, 0, 0);
+}
+#printButton {
+    background-color: #007BFF; /* Change the background color for the print button */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center content horizontally */
+}
+
+#printButton:hover {
+    background-color: #80a2c6;
+}
+
+#printIcon {
+    margin-right: 8px;
+}
+#medicineButtons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.medicineButton {
+    width: 100%;
+    padding: 10px 15px;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
     background-color: #4CAF50;
     color: white;
 }
+
+.medicineButton:hover {
+    background-color: #45a049;
+}
+
