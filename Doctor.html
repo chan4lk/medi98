@@ -94,6 +94,7 @@
         #downloadPrintButtons {
     grid-column: 1 / span 2; 
     text-align: left; 
+    
 }
 
 
@@ -101,6 +102,7 @@
             display: none; 
         }
 
+        
         @media print {
             body {
                 margin: 0;
@@ -127,7 +129,8 @@
             }
 
             .prescription-details {
-                page-break-before: always;  }
+                page-break-before: always; 
+             }
 
             .medicine-container {
                 display: block;
@@ -340,7 +343,6 @@
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true };
             currentDateTimeContainer.textContent = now.toLocaleString('en-US', options);
         }
-
         function handleInput(input, suggestionsList) {
             const inputValue = input.value.toLowerCase();
             const suggestions = drugNames.filter(name => name.toLowerCase().includes(inputValue));
@@ -352,9 +354,12 @@
                 li.textContent = suggestion;
                 suggestionsList.appendChild(li);
             });
-        }
 
-       
+            if (suggestions.length === 1 && suggestions[0].toLowerCase() === inputValue) {
+                input.value = suggestions[0];
+                suggestionsList.innerHTML = '';
+            }
+        }
 
         function handleSuggestionClick(event, input, suggestionsList) {
             if (event.target.tagName === 'LI') {
