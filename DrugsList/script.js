@@ -548,7 +548,7 @@ function addMedicine() {
     const foodOptions = ['Before Meal', 'After Meal'];
     foodOptions.forEach(option => {
         const foodOption = document.createElement('option');
-        foodOption.value = option.toLowerCase();
+        foodOption.value = option; 
         foodOption.textContent = option;
         foodInstructionsSelect.appendChild(foodOption);
     });
@@ -557,7 +557,7 @@ function addMedicine() {
     const medOptions = ['Every 1 Hours', 'Every 2 Hours','Every 3 Hours', 'Every 4 Hours','Every 5 Hours', 'Every 6 Hours','Every 7 Hours', 'Every 8 Hours'];
     medOptions.forEach(option => {
         const medOption = document.createElement('option');
-        medOption.value = option.toLowerCase();
+        medOption.value = option;
         medOption.textContent = option;
         medInstructionsSelect.appendChild(medOption);
     });
@@ -655,8 +655,8 @@ function PrintElem(elem)
     mywindow.document.write(document.getElementById(elem).innerHTML);
     mywindow.document.write('</body></html>');
 
-    mywindow.document.close(); // necessary for IE >= 10
-    mywindow.focus(); // necessary for IE >= 10*/
+    mywindow.document.close(); 
+    mywindow.focus(); 
 
     mywindow.print();
     mywindow.close();
