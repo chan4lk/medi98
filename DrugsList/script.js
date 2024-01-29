@@ -332,235 +332,246 @@ const drugNames = [
     'Methionine',
     'Methotrexate',
   ];
-  
-        const patientNameInput = document.getElementById('patientName');
-        const patientAgeInput = document.getElementById('patientAge');
-        const medicineListContainer = document.getElementById('medicineList');
-        const prescriptionList = document.getElementById('prescriptionList');
-        const printedPrescriptionList = document.getElementById('printedPrescriptionList');
-        const currentDateTimeContainer = document.getElementById('currentDateTime');
-        const addPrescriptionButton = document.getElementById('addPrescriptionButton');
+ 
+const patientNameInput = document.getElementById('patientName');
+const patientAgeInput = document.getElementById('patientAge');
+const medicineListContainer = document.getElementById('medicineList');
+const prescriptionList = document.getElementById('prescriptionList');
+const printedPrescriptionList = document.getElementById('printedPrescriptionList');
+const currentDateTimeContainer = document.getElementById('currentDateTime');
+const addPrescriptionButton = document.getElementById('addPrescriptionButton');
 
+let patientDetailsAdded = false;
 
-        let patientDetailsAdded = false;
+updateCurrentDateTime();
 
-        updateCurrentDateTime();
+setInterval(updateCurrentDateTime, 1000);
 
-        setInterval(updateCurrentDateTime, 1000);
+function addMedicine() {
+    const medicineContainer = document.createElement('div');
+    medicineContainer.classList.add('medicine-container');
 
-        function addMedicine() {
-            const medicineContainer = document.createElement('div');
-            medicineContainer.classList.add('medicine-container');
+    const drugInput = document.createElement('input');
+    drugInput.type = 'text';
+    drugInput.placeholder = 'Drug Name';
+    drugInput.autocomplete = 'off';
 
-            const drugInput = document.createElement('input');
-            drugInput.type = 'text';
-            drugInput.placeholder = 'Drug Name';
-            drugInput.autocomplete = 'off';
+    const suggestionsList = document.createElement('ul');
+    suggestionsList.classList.add('suggestions');
 
-            const suggestionsList = document.createElement('ul');
-            suggestionsList.classList.add('suggestions');
+    const tabletCountInput = document.createElement('input');
+    tabletCountInput.type = 'number';
+    tabletCountInput.placeholder = 'Tablet Count';
+    tabletCountInput.required = true;
 
-            const tabletCountInput = document.createElement('input');
-            tabletCountInput.type = 'number';
-            tabletCountInput.placeholder = 'Tablet Count';
-            tabletCountInput.required = true;
+    const foodInstructionsSelect = document.createElement('select');
+    const foodOptions = ['Before Meal', 'After Meal'];
+    foodOptions.forEach(option => {
+        const foodOption = document.createElement('option');
+        foodOption.value = option;
+        foodOption.textContent = option;
+        foodInstructionsSelect.appendChild(foodOption);
+    });
 
-            const foodInstructionsSelect = document.createElement('select');
-            const foodOptions = ['Before Meal', 'After Meal'];
-            foodOptions.forEach(option => {
-                const foodOption = document.createElement('option');
-                foodOption.value = option;
-                foodOption.textContent = option;
-                foodInstructionsSelect.appendChild(foodOption);
-            });
+    const medInstructionsSelect = document.createElement('select');
+    const medOptions = ['Every 1 Hours', 'Every 2 Hours', 'Every 3 Hours', 'Every 4 Hours', 'Every 5 Hours', 'Every 6 Hours', 'Every 7 Hours', 'Every 8 Hours'];
+    medOptions.forEach(option => {
+        const medOption = document.createElement('option');
+        medOption.value = option;
+        medOption.textContent = option;
+        medInstructionsSelect.appendChild(medOption);
+    });
 
-            const medInstructionsSelect = document.createElement('select');
-            const medOptions = ['Every 1 Hours', 'Every 2 Hours','Every 3 Hours', 'Every 4 Hours','Every 5 Hours', 'Every 6 Hours','Every 7 Hours', 'Every 8 Hours'];
-            medOptions.forEach(option => {
-                const medOption = document.createElement('option');
-                medOption.value = option;
-                medOption.textContent = option;
-                medInstructionsSelect.appendChild(medOption);
-            });
+    const removeButton = document.createElement('button');
+    removeButton.textContent = 'Remove Medicine';
+    removeButton.type = 'button';
+    removeButton.onclick = function () {
+        medicineContainer.remove();
+    };
 
-            const removeButton = document.createElement('button');
-            removeButton.textContent = 'Remove Medicine';
-            removeButton.type = 'button';
-            removeButton.onclick = function() {
-                medicineContainer.remove();
-            };
+    medicineContainer.appendChild(drugInput);
+    medicineContainer.appendChild(suggestionsList);
+    medicineContainer.appendChild(tabletCountInput);
+    medicineContainer.appendChild(foodInstructionsSelect);
+    medicineContainer.appendChild(medInstructionsSelect);
+    medicineContainer.appendChild(removeButton);
 
-            medicineContainer.appendChild(drugInput);
-            medicineContainer.appendChild(suggestionsList);
-            medicineContainer.appendChild(tabletCountInput);
-            medicineContainer.appendChild(foodInstructionsSelect);
-            medicineContainer.appendChild(medInstructionsSelect);
-            medicineContainer.appendChild(removeButton);
+    medicineListContainer.appendChild(medicineContainer);
 
-            medicineListContainer.appendChild(medicineContainer);
+    drugInput.addEventListener('input', function () {
+        handleInput(drugInput, suggestionsList);
+    });
 
-            drugInput.addEventListener('input', function() {
-                handleInput(drugInput, suggestionsList);
-            });
+    suggestionsList.addEventListener('click', function (event) {
+        handleSuggestionClick(event, drugInput, suggestionsList);
+    });
 
-            suggestionsList.addEventListener('click', function(event) {
-                handleSuggestionClick(event, drugInput, suggestionsList);
-            });
+    // Show the "Add Prescription" button after adding a medicine
     addPrescriptionButton.style.display = 'block';
 }
 
-        function addPrescription() {
-            if (patientDetailsAdded) {
-                alert("Patient Details Can Only be Added Once.");
-                return;
-            }
+function addPrescription() {
+    if (patientDetailsAdded) {
+        alert("Patient Details Can Only be Added Once.");
+        return;
+    }
 
-            const patientName = patientNameInput.value.trim();
-            const patientAge = patientAgeInput.value.trim();
+    const patientName = patientNameInput.value.trim();
+    const patientAge = patientAgeInput.value.trim();
 
-            if (patientName !== '' && patientAge !== '') {
-                const medicines = document.querySelectorAll('.medicine-container');
-                const prescriptionItem = document.createElement('div');
-                prescriptionItem.classList.add('prescription-details');
+    if (patientName !== '' && patientAge !== '') {
+        const medicines = document.querySelectorAll('.medicine-container');
+        const prescriptionItem = document.createElement('div');
+        prescriptionItem.classList.add('prescription-details');
 
-                const prescriptionTable = document.createElement('table');
-                prescriptionTable.innerHTML = `
-                    <tr>
-                        <th colspan="4" style="text-align: center;">Patient: ${patientName}, Age: ${patientAge}</th>
-                    </tr>
-                    <tr>
-                        <th style="text-align: center;">Drug Name</th>
-                        <th style="text-align: center;">Tablet Count</th>
-                        <th style="text-align: center;">Meal Instructions</th>
-                        <th style="text-align: center;">Frequency</th>
-                    </tr>
+        const prescriptionTable = document.createElement('table');
+        prescriptionTable.innerHTML = `
+            <tr>
+                <th colspan="4" style="text-align: center;">Patient: ${patientName}, Age: ${patientAge}</th>
+            </tr>
+            <tr>
+                <th style="text-align: center;">Drug Name</th>
+                <th style="text-align: center;">Tablet Count</th>
+                <th style="text-align: center;">Meal Instructions</th>
+                <th style="text-align: center;">Frequency</th>
+            </tr>
+        `;
+
+        medicines.forEach((medicine, index) => {
+            const drugName = medicine.querySelector('input').value.trim();
+            const tabletCount = medicine.querySelector('input[type="number"]').value.trim();
+            const foodInstructions = medicine.querySelector('select').value;
+            const medInstructions = medicine.querySelector('select:nth-child(5)').value;
+
+            if (drugName !== '' && tabletCount !== '') {
+                const newRow = prescriptionTable.insertRow(-1);
+                newRow.innerHTML = `
+                    <td style="text-align: center;">${drugName}</td>
+                    <td style="text-align: center;">${tabletCount}</td>
+                    <td style="text-align: center;">${foodInstructions}</td>
+                    <td style="text-align: center;">${medInstructions}</td>
                 `;
-
-                medicines.forEach((medicine, index) => {
-                    const drugName = medicine.querySelector('input').value.trim();
-                    const tabletCount = medicine.querySelector('input[type="number"]').value.trim();
-                    const foodInstructions = medicine.querySelector('select').value;
-                    const medInstructions = medicine.querySelector('select:nth-child(5)').value;
-
-                    if (drugName !== '' && tabletCount !== '') {
-                        const newRow = prescriptionTable.insertRow(-1);
-                        newRow.innerHTML = `
-                            <td style="text-align: center;">${drugName}</td>
-                            <td style="text-align: center;">${tabletCount}</td>
-                            <td style="text-align: center;">${foodInstructions}</td>
-                            <td style="text-align: center;">${medInstructions}</td>
-                        `;
-                    }
-                });
-
-                prescriptionItem.appendChild(prescriptionTable);
-                prescriptionList.appendChild(prescriptionItem);
-
-                const downloadPrintButtons = document.getElementById('downloadPrintButtons');
-                downloadPrintButtons.style.display = 'block';
-
-                medicines.forEach(medicine => {
-                    medicine.remove();
-                });
-
-                patientDetailsAdded = true;
-    addPrescriptionButton.style.display = 'none';
             }
-            
-        }
+        });
 
-        function PrintElem(elem)
-        {
-            var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+        prescriptionItem.appendChild(prescriptionTable);
+        prescriptionList.appendChild(prescriptionItem);
 
-            mywindow.document.write('<html><head><title>' + document.title  + '</title>');
-            mywindow.document.write('</head><body >');
-            mywindow.document.write('<h1>' + document.title  + '</h1>');
-            mywindow.document.write(document.getElementById(elem).innerHTML);
-            mywindow.document.write('</body></html>');
+        const downloadPrintButtons = document.getElementById('downloadPrintButtons');
+        downloadPrintButtons.style.display = 'block';
 
-            mywindow.document.close(); // necessary for IE >= 10
-            mywindow.focus(); // necessary for IE >= 10*/
+        medicines.forEach(medicine => {
+            medicine.remove();
+        });
 
-            mywindow.print();
-            mywindow.close();
+        patientDetailsAdded = true;
 
-            return true;
-        }
-    
+        // Hide the "Add Prescription" button after adding prescription
+        addPrescriptionButton.style.display = 'none';
+    }
+}
 
-        function printPrescription() {
+function PrintElem(elem) {
+    var mywindow = window.open('', 'PRINT', 'height=400,width=600');
 
-            PrintElem('prescriptionList');
-            return;
-            const printedPrescriptionContent = document.getElementById('printedPrescriptionList').innerHTML;
-            const printContainer = document.getElementById('printUserInputResultsContainer');
-            printContainer.innerHTML = printedPrescriptionContent;
+    mywindow.document.write('<html><head><title>' + document.title + '</title>');
+    mywindow.document.write('</head><body >');
+    mywindow.document.write('<h1>' + document.title + '</h1>');
+    mywindow.document.write(document.getElementById(elem).innerHTML);
+    mywindow.document.write('</body></html>');
 
-            html2canvas(printContainer, {
-                allowTaint: true,
-                useCORS: true
-            }).then(canvas => {
-                const dataURL = canvas.toDataURL();
+    mywindow.document.close(); // necessary for IE >= 10
+    mywindow.focus(); // necessary for IE >= 10*/
 
-                const printWindow = window.open();
-                printWindow.document.write('<html><head><title>Print</title></head><body>');
-                printWindow.document.write('<img src="' + dataURL + '" />');
-                printWindow.document.write('</body></html>');
+    mywindow.print();
+    mywindow.close();
 
-                printWindow.print();
-                printWindow.close();
-            });
+    return true;
+}
 
-            printContainer.innerHTML = '';
-        }
+function printPrescription() {
+    PrintElem('prescriptionList');
+    return;
+    const printedPrescriptionContent = document.getElementById('printedPrescriptionList').innerHTML;
+    const printContainer = document.getElementById('printUserInputResultsContainer');
+    printContainer.innerHTML = printedPrescriptionContent;
 
-        function clearForm() {
-            document.getElementById('prescriptionForm').reset();
-            medicineListContainer.innerHTML = '';
-            prescriptionList.innerHTML = '';
-            printedPrescriptionList.innerHTML = '';
-            patientDetailsAdded = false;
-        }
+    html2canvas(printContainer, {
+        allowTaint: true,
+        useCORS: true
+    }).then(canvas => {
+        const dataURL = canvas.toDataURL();
 
-        function updateCurrentDateTime() {
-            const now = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true };
-            currentDateTimeContainer.textContent = now.toLocaleString('en-US', options);
-        }
+        const printWindow = window.open();
+        printWindow.document.write('<html><head><title>Print</title></head><body>');
+        printWindow.document.write('<img src="' + dataURL + '" />');
+        printWindow.document.write('</body></html>');
 
-        function handleInput(input, suggestionsList) {
-            const inputValue = input.value.toLowerCase();
-            const suggestions = drugNames.filter(name => name.toLowerCase().includes(inputValue));
+        printWindow.print();
+        printWindow.close();
+    });
 
-            suggestionsList.innerHTML = '';
+    printContainer.innerHTML = '';
+}
 
-            suggestions.forEach(suggestion => {
-                const li = document.createElement('li');
-                li.textContent = suggestion;
+function clearForm() {
+    document.getElementById('prescriptionForm').reset();
+    medicineListContainer.innerHTML = '';
+    prescriptionList.innerHTML = '';
+    printedPrescriptionList.innerHTML = '';
+    patientDetailsAdded = false;
 
-                li.addEventListener('mouseover', function() {
-                    li.style.backgroundColor = 'lightblue';
-                    li.style.borderColor = 'darkblue';
-                });
+    // Show the "Add Prescription" button after clearing the form
+    addPrescriptionButton.style.display = 'block';
+}
 
-                li.addEventListener('mouseout', function() {
-                    li.style.backgroundColor = '';
-                    li.style.borderColor = '#ccc';
-                });
+function updateCurrentDateTime() {
+    const now = new Date();
+    const options = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+        hour12: true
+    };
+    currentDateTimeContainer.textContent = now.toLocaleString('en-US', options);
+}
 
-                suggestionsList.appendChild(li);
-            });
+function handleInput(input, suggestionsList) {
+    const inputValue = input.value.toLowerCase();
+    const suggestions = drugNames.filter(name => name.toLowerCase().includes(inputValue));
 
-            if (suggestions.length === 1 && suggestions[0].toLowerCase() === inputValue) {
-                input.value = suggestions[0];
-                suggestionsList.innerHTML = '';
-            }
-        }
+    suggestionsList.innerHTML = '';
 
-        function handleSuggestionClick(event, input, suggestionsList) {
-            if (event.target.tagName === 'LI') {
-                input.value = event.target.textContent;
-                suggestionsList.innerHTML = '';
-            }
-        }
+    suggestions.forEach(suggestion => {
+        const li = document.createElement('li');
+        li.textContent = suggestion;
+
+        li.addEventListener('mouseover', function () {
+            li.style.backgroundColor = 'lightblue';
+            li.style.borderColor = 'darkblue';
+        });
+
+        li.addEventListener('mouseout', function () {
+            li.style.backgroundColor = '';
+            li.style.borderColor = '#ccc';
+        });
+
+        suggestionsList.appendChild(li);
+    });
+
+    if (suggestions.length === 1 && suggestions[0].toLowerCase() === inputValue) {
+        input.value = suggestions[0];
+        suggestionsList.innerHTML = '';
+    }
+}
+
+function handleSuggestionClick(event, input, suggestionsList) {
+    if (event.target.tagName === 'LI') {
+        input.value = event.target.textContent;
+        suggestionsList.innerHTML = '';
+    }
+}

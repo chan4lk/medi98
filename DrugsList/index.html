@@ -23,8 +23,6 @@
             <input type="number" id="patientAge" required>
 
             <div id="medicineList"></div>
-
-
         </form>
 
         <div id="prescriptionList">
@@ -36,19 +34,19 @@
                 <span id="printIcon">🖨️</span> Print Prescription
             </button>
         </div>
-        <div >
+        <div>
             <button id="addMedicineButton" onclick="addMedicine()">
                 <i class="fas fa-plus"></i> Add Medicine
             </button>
-            <button id="addPrescriptionButton" onclick="addPrescription()">
+            <button id="addPrescriptionButton" onclick="addPrescription()" style="display: none;">
                 <i class="fas fa-prescription"></i> Add Prescription
             </button>
-            
+
             <button id="clearFormButton" onclick="clearForm()">
                 <i class="fas fa-trash"></i> Clear
             </button>
         </div>
-        
+
     </main>
 
     <div id="printContainer">
