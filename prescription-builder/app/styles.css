@@ -1,4 +1,4 @@
-/* body {
+body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
@@ -17,7 +17,7 @@ header {
     padding: 1em;
     text-align: center;
     width: 25%;
-} */
+}
 
 main {
     display: flex;
