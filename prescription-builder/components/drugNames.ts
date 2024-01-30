@@ -1,4 +1,4 @@
-export const drugNames = [
+const drugNames: string[] = [
     'Aspirin',
     'Paracetamol',
     'Ibuprofen',
@@ -332,3 +332,5 @@ export const drugNames = [
     'Methionine',
     'Methotrexate',
 ];
+export default drugNames;
+
