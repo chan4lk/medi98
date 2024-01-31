@@ -60,11 +60,27 @@ const App: React.FC = () => {
               margin-top: 10px;
             }
             th, td {
-              border: 1px solid #ddd;
+              border: 1px solid #000;
               padding: 8px;
-              text-align: left;
+              text-align: center;
             }
-            
+            th {
+              background-color: #ddd; /* Light gray background for header */
+            }
+            tr:nth-child(even) {
+              background-color: #fff; /* Light gray background for even rows */
+            }
+            tr:nth-child(odd) {
+              background-color: #fff; /* White background for odd rows */
+            }
+            * Set print dimensions */
+        @media print {
+          body {
+            width: 8.5in;
+            height: 11in;
+            margin: 0; /* Reset margin for print */
+          }
+        }
           </style>
         </head>
         <body>
@@ -162,22 +178,22 @@ const MedicineTable: React.FC<MedicineTableProps> = ({ medicines, onEdit, onDele
       <h2 className="text-xl font-bold mb-4">Medicine List</h2>
       <table className="w-full border-collapse border border-gray-300">
         <thead>
-          <tr className="bg-gray-200">
-            <th className="border border-gray-300 p-2">Drug Name</th>
-            <th className="border border-gray-300 p-2">Tablet Count</th>
-            <th className="border border-gray-300 p-2">Food Instructions</th>
-            <th className="border border-gray-300 p-2">Frequency</th>
-            <th className="border border-gray-300 p-2">Actions</th>
+          <tr className="bg-gray-400">
+            <th className="border border-gray-900 p-2">Drug Name</th>
+            <th className="border border-gray-900 p-2">Tablet Count</th>
+            <th className="border border-gray-900 p-2">Food Instructions</th>
+            <th className="border border-gray-900 p-2">Frequency</th>
+            <th className="border border-gray-900 p-2">Actions</th>
           </tr>
         </thead>
         <tbody>
           {medicines.map((medicine) => (
-            <tr key={medicine.id}>
-              <td className="border border-gray-300 p-2">{medicine.drugName}</td>
-              <td className="border border-gray-300 p-2">{medicine.tabletCount}</td>
-              <td className="border border-gray-300 p-2">{medicine.foodInstructions}</td>
-              <td className="border border-gray-300 p-2">{medicine.medInstructions}</td>
-              <td className="border border-gray-300 p-2">
+            <tr  className="bg-gray-200 text-align: center" key={medicine.id}>
+              <td className="border border-gray-900 p-2">{medicine.drugName}</td>
+              <td className="border border-gray-900 p-2">{medicine.tabletCount}</td>
+              <td className="border border-gray-900 p-2">{medicine.foodInstructions}</td>
+              <td className="border border-gray-900 p-2">{medicine.medInstructions}</td>
+              <td className="border border-gray-900 p-2">
                 <button
                   onClick={() => {
                     const updatedMedicine     = prompt('Edit Medicine:', medicine.drugName);
