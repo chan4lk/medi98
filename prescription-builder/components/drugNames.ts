@@ -333,4 +333,3 @@ const drugNames: string[] = [
     'Methotrexate',
 ];
 export default drugNames;
-

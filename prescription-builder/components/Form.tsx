@@ -23,10 +23,12 @@ const Form: React.FC<FormProps> = ({ onAddMedicine, patientName, patientAge, set
     foodInstructions: 'Before Meal',
     medInstructions: 'Every 1 Hour',
   });
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState<boolean>(false); // State to control showing suggestions
+  const [highlightedIndex, setHighlightedIndex] = useState<number>(-1); // State to track the highlighted suggestion
+  const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]); // State to hold filtered suggestions
 
   useEffect(() => {
-    setSuggestions(drugNames);
+    setFilteredSuggestions(drugNames);
   }, []);
 
   const handleTabletCountChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -42,22 +44,20 @@ const Form: React.FC<FormProps> = ({ onAddMedicine, patientName, patientAge, set
       ...prevMedicine,
       drugName: inputDrugName,
     }));
+    // Filter drug names based on input
+    const filteredSuggestions = drugNames.filter(name =>
+      name.toLowerCase().startsWith(inputDrugName.toLowerCase())
+    );
+    setFilteredSuggestions(filteredSuggestions);
+    setShowSuggestions(inputDrugName.length > 0); // Show suggestions only if there is input
   };
 
-  const handleFoodInstructionsChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedFoodInstruction = e.target.value;
-    setMedicine((prevMedicine) => ({
-      ...prevMedicine,
-      foodInstructions: selectedFoodInstruction,
-    }));
+  const handleFocus = () => {
+    setShowSuggestions(true); // Show suggestions when input is focused
   };
 
-  const handleFrequencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedFrequency = e.target.value;
-    setMedicine((prevMedicine) => ({
-      ...prevMedicine,
-      medInstructions: selectedFrequency,
-    }));
+  const handleBlur = () => {
+    setShowSuggestions(false); // Hide suggestions when input loses focus
   };
 
   const handleDrugNameSuggestionClick = (suggestion: string) => {
@@ -65,6 +65,26 @@ const Form: React.FC<FormProps> = ({ onAddMedicine, patientName, patientAge, set
       ...prevMedicine,
       drugName: suggestion,
     }));
+    setShowSuggestions(false); // Hide suggestions when suggestion is clicked
+    const inputField = document.getElementById('drugName') as HTMLInputElement;
+    if (inputField) {
+      inputField.value = suggestion; // Set input field value to the suggestion
+      inputField.setSelectionRange(suggestion.length, suggestion.length); // Set cursor position to end of input
+      inputField.focus();
+    }
+  };
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setHighlightedIndex(prevIndex =>
+        prevIndex < filteredSuggestions.length - 1 ? prevIndex + 1 : prevIndex
+      );
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setHighlightedIndex(prevIndex => (prevIndex > 0 ? prevIndex - 1 : prevIndex));
+    } else if (e.key === 'Enter' && highlightedIndex !== -1) {
+      handleDrugNameSuggestionClick(filteredSuggestions[highlightedIndex]);
+    }
   };
 
   const handleAddMedicine = () => {
@@ -81,6 +101,26 @@ const Form: React.FC<FormProps> = ({ onAddMedicine, patientName, patientAge, set
       foodInstructions: 'Before Meal', // Reset to default
       medInstructions: 'Every 1 Hour', // Reset to default
     });
+    setShowSuggestions(false); // Clear suggestions after adding medicine
+    setHighlightedIndex(-1); // Reset highlighted index
+  };
+
+  // Define handleFoodInstructionsChange
+  const handleFoodInstructionsChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedFoodInstruction = e.target.value;
+    setMedicine((prevMedicine) => ({
+      ...prevMedicine,
+      foodInstructions: selectedFoodInstruction,
+    }));
+  };
+
+  // Define handleFrequencyChange
+  const handleFrequencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedFrequency = e.target.value;
+    setMedicine((prevMedicine) => ({
+      ...prevMedicine,
+      medInstructions: selectedFrequency,
+    }));
   };
 
   return (
@@ -113,18 +153,31 @@ const Form: React.FC<FormProps> = ({ onAddMedicine, patientName, patientAge, set
         Drug Name:
       </label>
       <input
-        type="text"
-        id="drugName"
-        value={medicine.drugName}
-        onChange={handleDrugNameChange}
-        list="drugNamesList"
-        className="input-field"
-      />
-      <datalist id="drugNamesList">
-        {drugNames.map((name) => (
-          <option key={name} value={name} />
-        ))}
-      </datalist>
+  type="text"
+  id="drugName"
+  value={medicine.drugName}
+  onChange={handleDrugNameChange}
+  onFocus={handleFocus}
+  onBlur={handleBlur}
+  onKeyDown={handleKeyDown}
+  className="input-field"
+/>
+
+{showSuggestions && (
+  <ul className="suggestions">
+    {filteredSuggestions.map((suggestion, index) => (
+      <li 
+        key={index} 
+        onClick={() => handleDrugNameSuggestionClick(suggestion)}
+        onMouseEnter={() => setHighlightedIndex(index)} // Highlight suggestion on mouse enter
+        className={`cursor-pointer ${index === highlightedIndex ? 'bg-gray-200' : ''}`} // Apply highlighted style based on index
+      >
+        {suggestion}
+      </li>
+    ))}
+  </ul>
+)}
+    
 
       <label htmlFor="tabletCount" className="font-bold">
         Tablet Count:
