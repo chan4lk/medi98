@@ -1,23 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import drugNames from './drugNames';
+import { Medicine } from '@/app/types';
 
 interface FormProps {
-  onAddMedicine: (medicine: Omit<Medicine, 'id'>) => void; // Omit 'id' property
+  onAddMedicine: (medicine: Medicine) => void; // Omit 'id' property
   patientName: string;
   patientAge: string;
   setPatientName: React.Dispatch<React.SetStateAction<string>>;
   setPatientAge: React.Dispatch<React.SetStateAction<string>>;
 }
 
-interface Medicine {
-  drugName: string;
-  tabletCount: string;
-  foodInstructions: string;
-  medInstructions: string;
-}
-
 const Form: React.FC<FormProps> = ({ onAddMedicine, patientName, patientAge, setPatientName, setPatientAge }) => {
   const [medicine, setMedicine] = useState<Medicine>({
+    id: 0,
     drugName: '',
     tabletCount: '1', // Default to 1
     foodInstructions: 'Before Meal',
@@ -96,6 +91,7 @@ const Form: React.FC<FormProps> = ({ onAddMedicine, patientName, patientAge, set
     onAddMedicine(medicine);
 
     setMedicine({
+      id: 0,
       drugName: '',
       tabletCount: '1',
       foodInstructions: 'Before Meal', // Reset to default

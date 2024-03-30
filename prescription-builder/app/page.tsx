@@ -1,15 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import Form from '../components/Form';
-
-
-interface Medicine {
-  id: number;
-  drugName: string;
-  tabletCount: number;
-  foodInstructions: string;
-  medInstructions: string;
-}
+import { Medicine } from './types';
 
 
 const App: React.FC = () => {
@@ -19,7 +11,7 @@ const App: React.FC = () => {
   const [patientName, setPatientName] = useState('');
   const [patientAge, setPatientAge] = useState('');
 
-  const addMedicine = (medicine: Omit<Medicine, 'id'>) => {
+  const addMedicine = (medicine: Medicine) => {
     setMedicines([...medicines, { ...medicine, id: counter }]);
     setCounter(counter + 1);
   };
