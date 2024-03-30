@@ -40,11 +40,7 @@ const Form: React.FC<FormProps> = ({ onAddMedicine, patientName, patientAge, set
       drugName: inputDrugName,
     }));
     // Filter drug names based on input
-    const filteredSuggestions = drugNames.filter(name =>
-      name.toLowerCase().startsWith(inputDrugName.toLowerCase())
-    );
-    setFilteredSuggestions(filteredSuggestions);
-    setShowSuggestions(inputDrugName.length > 0); // Show suggestions only if there is input
+    updateSuggestions(inputDrugName);
   };
 
   const handleFocus = () => {
@@ -52,7 +48,7 @@ const Form: React.FC<FormProps> = ({ onAddMedicine, patientName, patientAge, set
   };
 
   const handleBlur = () => {
-    setShowSuggestions(false); // Hide suggestions when input loses focus
+    //setShowSuggestions(false); // Hide suggestions when input loses focus
   };
 
   const handleDrugNameSuggestionClick = (suggestion: string) => {
@@ -66,8 +62,20 @@ const Form: React.FC<FormProps> = ({ onAddMedicine, patientName, patientAge, set
       inputField.value = suggestion; // Set input field value to the suggestion
       inputField.setSelectionRange(suggestion.length, suggestion.length); // Set cursor position to end of input
       inputField.focus();
+
+      updateSuggestions(suggestion);
     }
+
+
   };
+
+  const updateSuggestions = (suggestion: string) => {
+    const filteredSuggestions = drugNames.filter(name => name.toLowerCase().startsWith(suggestion.toLowerCase()) &&
+      name.toLowerCase() !== suggestion.toLowerCase()
+    );
+    setFilteredSuggestions(filteredSuggestions);
+    setShowSuggestions(suggestion.length > 0);
+  }
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'ArrowDown') {
       e.preventDefault();
@@ -149,31 +157,31 @@ const Form: React.FC<FormProps> = ({ onAddMedicine, patientName, patientAge, set
         Drug Name:
       </label>
       <input
-  type="text"
-  id="drugName"
-  value={medicine.drugName}
-  onChange={handleDrugNameChange}
-  onFocus={handleFocus}
-  onBlur={handleBlur}
-  onKeyDown={handleKeyDown}
-  className="input-field"
-/>
+        type="text"
+        id="drugName"
+        value={medicine.drugName}
+        onChange={handleDrugNameChange}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        onKeyDown={handleKeyDown}
+        className="input-field"
+      />
 
-{showSuggestions && (
-  <ul className="suggestions">
-    {filteredSuggestions.map((suggestion, index) => (
-      <li 
-        key={index} 
-        onClick={() => handleDrugNameSuggestionClick(suggestion)}
-        onMouseEnter={() => setHighlightedIndex(index)} // Highlight suggestion on mouse enter
-        className={`cursor-pointer ${index === highlightedIndex ? 'bg-gray-200' : ''}`} // Apply highlighted style based on index
-      >
-        {suggestion}
-      </li>
-    ))}
-  </ul>
-)}
-    
+      {showSuggestions && (
+        <ul className="suggestions">
+          {filteredSuggestions.map((suggestion, index) => (
+            <li
+              key={index}
+              onClick={() => handleDrugNameSuggestionClick(suggestion)}
+              onMouseEnter={() => setHighlightedIndex(index)} // Highlight suggestion on mouse enter
+              className={`cursor-pointer ${index === highlightedIndex ? 'bg-gray-200' : ''}`} // Apply highlighted style based on index
+            >
+              {suggestion}
+            </li>
+          ))}
+        </ul>
+      )}
+
 
       <label htmlFor="tabletCount" className="font-bold">
         Tablet Count:
