@@ -2,6 +2,7 @@ import React from 'react';
 import { Header } from './Header';
 import { Line } from './Line';
 import { MediColumn } from './MediColumn';
+import { Summary } from './Summary';
 
 const NewPage: React.FC = () => {
     return <div className='p-4 grid grid-cols-1 gap-4 bg-midnight text-tahiti'>
@@ -51,7 +52,7 @@ const NewPage: React.FC = () => {
         </div>
 
         <Line />
-        <div></div>
+        <Summary />
     </div>
 };
 
