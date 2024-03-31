@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import drugNames from './drugNames';
-import { Medicine } from '@/app/types';
+import { Medicine } from '@/models/types';
 
 interface FormProps {
   onAddMedicine: (medicine: Medicine) => void; // Omit 'id' property
