@@ -1,0 +1,227 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+header {
+    background-color: #b4beb2;
+    color: rgb(46, 61, 60);
+    padding: 1em;
+    text-align: center;
+    width: 25%;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1000px;
+    margin: 20px;
+    padding: 20px;
+
+}
+
+form {
+    display: grid;
+    gap: 10px;
+    width: 100%;
+    max-width: 400px;
+}
+
+label {
+    font-weight: bold;
+}
+
+input,
+select,
+button {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 4px;
+    margin-bottom: 8px;
+}
+
+
+button {
+    color: white;
+    background-color: #8094df;
+    padding: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+}
+#addMedicineButton {
+    background-color: #28A745;
+    color: white;
+}
+
+#addPrescriptionButton {
+    background-color: #007BFF;
+    color: white;
+}
+
+#clearFormButton {
+    background-color: #DC3545;
+    color: white;
+}
+
+
+button:hover {
+    background-color: #87cde9;
+    opacity: 0.8;
+}
+
+#medicineList,
+#prescriptionList {
+    grid-column: span 2;
+}
+
+.prescription-details {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.medicine-container {
+    display: grid;
+    gap: 10px;
+}
+
+.suggestions {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#downloadPrintButtons {
+    grid-column: span 2;
+    text-align: center;
+}
+
+#printContainer {
+    display: none;
+}
+
+@media print {
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    main {
+        display: block;
+        width: 100%;
+    }
+
+    #downloadPrintButtons {
+        display: none;
+    }
+
+    #printContainer {
+        display: block;
+        width: 100%;
+    }
+
+    #printedPrescriptionList {
+        display: block;
+        width: 100%;
+    }
+
+    .prescription-details {
+        page-break-before: always;
+    }
+
+    .medicine-container {
+        display: block;
+        width: 100%;
+        border: none;
+    }
+
+    .suggestions li {
+        cursor: pointer;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        margin-bottom: 4px;
+    }
+
+    .suggestions li:hover {
+        background-color: lightblue;
+        border-color: darkblue;
+    }
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table,
+th,
+td {
+    border: 1px solid #ddd;
+}
+
+th,
+td {
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #96d0df;
+    color: rgb(0, 0, 0);
+}
+#printButton {
+    background-color:  #FFC107; /* Change the background color for the print button */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center content horizontally */
+}
+
+#printButton:hover {
+    background-color: #80a2c6;
+}
+
+#printIcon {
+    margin-right: 8px;
+}
+#medicineButtons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.medicineButton {
+    width: 100%;
+    padding: 10px 15px;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+}
+
+.medicineButton:hover {
+    background-color: #a04545;
+}
+
