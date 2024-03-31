@@ -3,16 +3,16 @@ import { Header } from './Header';
 import { Line } from './Line';
 import { MediColumn } from './MediColumn';
 import { Summary } from './Summary';
+import { MedicationSelection } from './MedicationSelection';
 
 const NewPage: React.FC = () => {
+    
     return <div className='p-4 grid grid-cols-1 gap-4 bg-midnight text-tahiti'>
         <Header />
         <Line />
         <div>
             <div className='grid md:grid-cols-7 gap-4'>
-                <MediColumn label="Medication" columnFor="medication" span={2}>
-                    <input type="text" name="medication" id="medication" className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="aspirin" />
-                </MediColumn>
+                <MedicationSelection />
                 <MediColumn label={"No of Days"} columnFor="days">
                     <input type="number" defaultValue="5" name="days" id="days" className="block w-full rounded-md border-0 py-1.5 pl-4 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="5" />
                 </MediColumn>
