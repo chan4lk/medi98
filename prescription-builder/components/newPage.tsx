@@ -64,6 +64,11 @@ const NewPage: React.FC = () => {
         });
         doc.save('prescription.pdf');
     };
+    const handleSave = () => {
+        // Logic to save prescription details
+        console.log("Prescription details saved:", tableData);
+        // You can send an API request to save data to the server, or store it locally
+    };
 
     return (
         <div className='p-4 grid grid-cols-1 gap-4 bg-midnight text-tahiti'>
@@ -173,7 +178,7 @@ const NewPage: React.FC = () => {
                         ))}
                     </tbody>
                 </table>
-                <div className="flex justify-end pt-4">
+                <div className="flex justify-end pt-4s pt-4">
     <button
         className="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-4 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-800"
         onClick={handlePrint}
@@ -181,12 +186,19 @@ const NewPage: React.FC = () => {
         Print Prescription
     </button>
     <button
-        className="text-white font-medium rounded-lg text-sm px-5 py-2.5 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-800"
+        className="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-4 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-800"
         onClick={handleDownload}
     >
         Download Prescription
     </button>
+    <button
+        className="text-white font-medium rounded-lg text-sm px-5 py-2.5 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-800"
+        onClick={handleSave}
+    >
+        Save Prescription
+    </button>
 </div>
+
 
             </div>
         </div>
