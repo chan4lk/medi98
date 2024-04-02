@@ -1,10 +1,13 @@
 import React, { useRef, useState } from 'react';
 
-export interface AutoCompleteProps {
-    list: string[],
-    value: string,
-    onChange: (selected: string) => void
+    export interface AutoCompleteProps {
+        list: string[];
+        value: string;
+        onChange: (selected: string) => void;
+        onSelect: (selected: string) => void; // Add onSelect prop to the interface
+        placeholder: string; // Add placeholder prop to the interface
 }
+    
 
 export const AutoComplete: React.FC<AutoCompleteProps> = ({ list, onChange, value }) => {
     const [showSuggestions, setShowSuggestions] = useState<boolean>(false); // State to control showing suggestions
