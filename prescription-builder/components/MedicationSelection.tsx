@@ -12,12 +12,10 @@ const MedicationSelection: React.FC<MedicationSelectionProps> = ({ onSelect }) =
     const [inputValue, setInputValue] = useState<string>('');
 
     const handleInputChange = (value: string) => {
+        onSelect(value);
         setInputValue(value);
     };
 
-    const handleMedicationSelect = (selectedMedication: string) => {
-        onSelect(selectedMedication);
-    };
 
     const filteredDrugs = drugNames.filter(drug =>
         drug.toLowerCase().includes(inputValue.toLowerCase())
@@ -28,7 +26,6 @@ const MedicationSelection: React.FC<MedicationSelectionProps> = ({ onSelect }) =
             <AutoComplete
                 list={filteredDrugs}
                 onChange={handleInputChange}
-                onSelect={handleMedicationSelect}
                 value={inputValue}
                 placeholder="Type to search..."
             />

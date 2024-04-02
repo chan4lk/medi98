@@ -4,6 +4,8 @@ import { Header } from './Header';
 import { Line } from './Line';
 import { MediColumn } from './MediColumn';
 import MedicationSelection from './MedicationSelection';
+import jsPDF from 'jspdf'; // Import jsPDF library for PDF generation
+
 
 interface MedicationDetails {
     selection: string;
@@ -41,14 +43,26 @@ const NewPage: React.FC = () => {
             price: 150.00,
         });
     };
+
     const handlePrint = () => {
-        // Implement your print functionality here
         window.print();
     };
 
     const handleDownload = () => {
-        // Implement your download functionality here
-        // For example, you can create a downloadable PDF
+        const doc = new jsPDF();
+        doc.text('Prescription Details', 10, 10);
+        let y = 20;
+        tableData.forEach((data, index) => {
+            doc.text(`Medication: ${data.selection}`, 10, y);
+            doc.text(`Days: ${data.days}`, 10, y + 10);
+            doc.text(`Schedule: ${data.schedule}`, 10, y + 20);
+            doc.text(`Taking: ${data.taking}`, 10, y + 30);
+            doc.text(`Notes: ${data.notes}`, 10, y + 40);
+            doc.text(`Qty: ${data.qty}`, 10, y + 50);
+            doc.text(`Price: ${data.price}`, 10, y + 60);
+            y += 70;
+        });
+        doc.save('prescription.pdf');
     };
 
     return (
@@ -105,7 +119,7 @@ const NewPage: React.FC = () => {
                     </MediColumn>
                 </div>
                 <div className='p-4 grid md:grid-cols-7 pt-2 gap-4'>
-                    <div className='md:col-span-5 sm:col-span-7'>
+                    <div className='p-4 md:col-span-5 sm:col-span-7'>
                         <textarea
                             id="notes"
                             rows={4}

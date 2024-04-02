@@ -4,7 +4,6 @@ import React, { useRef, useState } from 'react';
         list: string[];
         value: string;
         onChange: (selected: string) => void;
-        onSelect: (selected: string) => void; // Add onSelect prop to the interface
         placeholder: string; // Add placeholder prop to the interface
 }
     
