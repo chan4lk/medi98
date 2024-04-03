@@ -171,7 +171,7 @@ const PatientManagementSystem: React.FC = () => {
                 <input type="text" value={treatment.description} onChange={(e) => handleDescriptionChange(index, e)} />
             </MediColumn>
             <MediColumn label="" columnFor={`treatment-description-${index}`}>
-                <input type="" value={treatment.description} onChange={(e) => handleDescriptionChange(index, e)} />
+                <input type=""  onChange={(e) => handleDescriptionChange(index, e)} />
             </MediColumn>
             <MediColumn label="Unit Price" columnFor={`unit-price-${index}`}>
                 <input type="text" value={treatment.unitPrice} onChange={(e) => handleUnitPriceChange(index, e)} />
