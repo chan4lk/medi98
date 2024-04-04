@@ -142,9 +142,7 @@ const PatientManagementSystem: React.FC = () => {
     return (
         <div className='p-4 grid grid-cols-1 gap-4 bg-midnight text-tahiti'>
             <div className="bg-blue-100 text-white p-2">
-                <Header />
             </div>
-            <Line />
             
 <div className="flex justify-between pt-4">
     <button
