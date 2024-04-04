@@ -1,10 +1,13 @@
 "use client"
-import React, { useState } from 'react';
 import { Header } from '../../components/Header';
 import { Line } from '../../components/Line';
 import { MediColumn } from '../../components/MediColumn';
 import MedicationSelection from '../../components/MedicationSelection';
 import jsPDF from 'jspdf'; // Import jsPDF library for PDF generation
+import React, { useState, useEffect } from 'react'; // Import useEffect from React
+
+// Rest of your code...
+
 
 
 interface MedicationDetails {
@@ -25,10 +28,16 @@ const newPage: React.FC = () => {
         taking: '1',
         notes: '',
         qty: 15,
-        price: 150.00,
+        price: 0, // initialize price as 0
     });
 
     const [tableData, setTableData] = useState<MedicationDetails[]>([]);
+
+    useEffect(() => {
+        // Calculate price whenever any of the dependent values change
+        const newPrice = parseInt(medicationDetails.taking) * parseInt(medicationDetails.schedule) * medicationDetails.days;
+        setMedicationDetails({ ...medicationDetails, price: newPrice });
+    }, [medicationDetails.taking, medicationDetails.schedule, medicationDetails.days]);
 
     const handleAdd = () => {
         const newMedicationDetails = { ...medicationDetails };
@@ -40,10 +49,9 @@ const newPage: React.FC = () => {
             taking: '1',
             notes: '',
             qty: 15,
-            price: 150.00,
+            price: 0, // reset price after adding
         });
     };
-
     const handlePrint = () => {
         window.print();
     };
