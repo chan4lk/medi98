@@ -1,9 +1,9 @@
 "use client"
 import React, { useState } from 'react';
-import { Header } from './Header';
-import { Line } from './Line';
-import { MediColumn } from './MediColumn';
-import MedicationSelection from './MedicationSelection';
+import { Header } from '../../components/Header';
+import { Line } from '../../components/Line';
+import { MediColumn } from '../../components/MediColumn';
+import MedicationSelection from '../../components/MedicationSelection';
 import jsPDF from 'jspdf'; // Import jsPDF library for PDF generation
 
 
@@ -17,7 +17,7 @@ interface MedicationDetails {
     price: number;
 }
 
-const NewPage: React.FC = () => {
+const newPage: React.FC = () => {
     const [medicationDetails, setMedicationDetails] = useState<MedicationDetails>({
         selection: '',
         days: 5,
@@ -205,4 +205,4 @@ const NewPage: React.FC = () => {
     );
 };
 
-export default NewPage;
+export default newPage;

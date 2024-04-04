@@ -1,9 +1,9 @@
 "use client"
 import React, { useState } from 'react';
-import { Header } from './Header';
-import { Line } from './Line';
-import { MediColumn } from './MediColumn';
-import MedicationSelection from './MedicationSelection';
+import { Header } from '../../components/Header';
+import { Line } from '../../components/Line';
+import { MediColumn } from '../../components/MediColumn';
+import MedicationSelection from '../../components/MedicationSelection';
 import jsPDF from 'jspdf';
 
 
@@ -145,7 +145,8 @@ const PatientManagementSystem: React.FC = () => {
                 <Header />
             </div>
             <Line />
-            <div className="flex justify-between pt-4">
+            
+<div className="flex justify-between pt-4">
     <button
         className="text-black font-medium text-sm px-5 py-2.5 bg-white border border-black hover:bg-blue-300 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-800 transition duration-200"
         onClick={handleAddTreatment}
@@ -164,7 +165,7 @@ const PatientManagementSystem: React.FC = () => {
 
 
             
-           <div className='p-4'>
+<div className='p-4'>
     {treatmentDetails.map((treatment, index) => (
         <div key={index} className="grid grid-cols-5 gap-2" style={{ marginBottom: '20px' }}> {/* Add margin bottom */}
             <MediColumn label="Treatment" columnFor={`treatment-description-${index}`}>
