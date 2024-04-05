@@ -6,6 +6,7 @@ import MedicationSelection from '../../components/MedicationSelection';
 import jsPDF from 'jspdf';
 import React, { useState, useEffect } from 'react';
 
+
 interface MedicationDetails {
     selection: string;
     days: number;
@@ -147,9 +148,11 @@ const NewPage: React.FC = () => {
                             <div className="block text-md font-medium leading-6 text-gray-900">Availability</div>
                             <div className="relative rounded-md shadow-sm md:pl-2 pb-2">300</div>
                         </div>
-                        <div className='grid md:col-span-2 sm:col-span-2'>
+                        <div className="p-4 grid grid-cols-1 gap-4 bg-midnight text-tahiti justify">
+    {/* Content */}
+
                         <button
-          className="text-blue-900 font-medium text-sm px-5 py-2.5 bg-blue-100 border border-black hover:bg-blue-300 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-800 transition duration-200"
+          className="text-black font-medium text-sm px-5 py-2.5 bg-white border border-black hover:bg-blue-300 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-800 transition duration-200"
           onClick={handleAdd}
         >
           Add Medication
@@ -186,24 +189,25 @@ const NewPage: React.FC = () => {
                     </tbody>
                 </table>
                 <div className="flex justify-end pt-4s pt-4">
-    <button
-        className="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-4 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-800"
-        onClick={handlePrint}
-    >
-        Print Prescription
-    </button>
-    <button
-        className="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-4 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-800"
-        onClick={handleDownload}
-    >
-        Download Prescription
-    </button>
-    <button
-        className="text-white font-medium rounded-lg text-sm px-5 py-2.5 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-800"
-        onClick={handleSave}
-    >
-        Save Prescription
-    </button>
+                <button
+    className="text-blue-900 font-medium text-sm px-5 py-2.5 bg-blue-100 border border-black hover:bg-blue-300 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-800 transition duration-200 mr-2"
+    onClick={handlePrint}
+>
+    Print Prescription
+</button>
+<button
+    className="text-blue-900 font-medium text-sm px-5 py-2.5 bg-blue-100 border border-black hover:bg-blue-300 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-800 transition duration-200 mr-2"
+    onClick={handleDownload}
+>
+    Download Prescription
+</button>
+<button
+    className="text-blue-900 font-medium text-sm px-5 py-2.5 bg-blue-100 border border-black hover:bg-blue-300 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-800 transition duration-200"
+    onClick={handleSave}
+>
+    Save Prescription
+</button>
+
                 </div>
             </div>
         </div>

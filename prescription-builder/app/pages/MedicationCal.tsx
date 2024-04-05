@@ -6,6 +6,7 @@ import { MediColumn } from "../../components/MediColumn";
 import MedicationSelection from "../../components/MedicationSelection";
 import jsPDF from "jspdf";
 
+
 interface TreatmentDetail {
   description: string;
   unitPrice: string;
@@ -295,16 +296,16 @@ const PatientManagementSystem: React.FC = () => {
       <div className="flex justify-between pt-4">
         <div>
           <button
-            className="text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-4 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-800"
-            onClick={downloadPrescription}
+          className="text-blue-900 font-medium text-sm px-5 py-2.5 bg-blue-100 border border-black hover:bg-blue-300 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-800 transition duration-200"
+          onClick={downloadPrescription}
           >
             Download Prescription
           </button>
         </div>
         <div>
           <button
-            className="text-white font-medium rounded-lg text-sm px-5 py-2.5 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-800"
-            onClick={() => window.print()}
+          className="text-blue-900 font-medium text-sm px-5 py-2.5 bg-blue-100 border border-black hover:bg-blue-300 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-800 transition duration-200"
+          onClick={() => window.print()}
           >
             Print Bill
           </button>
