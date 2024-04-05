@@ -3,12 +3,8 @@ import { Header } from '../../components/Header';
 import { Line } from '../../components/Line';
 import { MediColumn } from '../../components/MediColumn';
 import MedicationSelection from '../../components/MedicationSelection';
-import jsPDF from 'jspdf'; // Import jsPDF library for PDF generation
-import React, { useState, useEffect } from 'react'; // Import useEffect from React
-
-// Rest of your code...
-
-
+import jsPDF from 'jspdf';
+import React, { useState, useEffect } from 'react';
 
 interface MedicationDetails {
     selection: string;
@@ -20,7 +16,7 @@ interface MedicationDetails {
     price: number;
 }
 
-const newPage: React.FC = () => {
+const NewPage: React.FC = () => {
     const [medicationDetails, setMedicationDetails] = useState<MedicationDetails>({
         selection: '',
         days: 5,
@@ -28,13 +24,12 @@ const newPage: React.FC = () => {
         taking: '1',
         notes: '',
         qty: 15,
-        price: 0, // initialize price as 0
+        price: 0,
     });
 
     const [tableData, setTableData] = useState<MedicationDetails[]>([]);
 
     useEffect(() => {
-        // Calculate price whenever any of the dependent values change
         const newPrice = parseInt(medicationDetails.taking) * parseInt(medicationDetails.schedule) * medicationDetails.days;
         setMedicationDetails({ ...medicationDetails, price: newPrice });
     }, [medicationDetails.taking, medicationDetails.schedule, medicationDetails.days]);
@@ -49,9 +44,10 @@ const newPage: React.FC = () => {
             taking: '1',
             notes: '',
             qty: 15,
-            price: 0, // reset price after adding
+            price: 0,
         });
     };
+
     const handlePrint = () => {
         window.print();
     };
@@ -72,67 +68,71 @@ const newPage: React.FC = () => {
         });
         doc.save('prescription.pdf');
     };
+
     const handleSave = () => {
-        // Logic to save prescription details
         console.log("Prescription details saved:", tableData);
         // You can send an API request to save data to the server, or store it locally
     };
 
     return (
-        <div className='p-4 grid grid-cols-1 gap-4 bg-midnight text-tahiti'>
+        <div className="p-4 bg-midnight text-tahiti">
             <div className="bg-blue-100 text-white p-2">
                 <Header />
             </div>
             <Line />
-            <div>
-                <div className='grid md:grid-cols-7 gap-4'>
-                    <MedicationSelection onSelect={(selection) => setMedicationDetails({ ...medicationDetails, selection })} />
-                    <MediColumn label={"No of Days"} columnFor="days">
-                        <input
-                            type="number"
-                            defaultValue="5"
-                            name="days"
-                            id="days"
-                            className="block w-full rounded-md border-0 py-1.5 pl-4 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            placeholder="5"
-                            onChange={(e) => setMedicationDetails({ ...medicationDetails, days: parseInt(e.target.value, 10) })}
-                        />
-                    </MediColumn>
-                    <MediColumn label="Schedule" columnFor="schedule">
-                        <select
-                            title='schedule'
-                            defaultValue={"1"}
-                            id="schedule"
-                            className="block w-full rounded-md border-0 py-1.5 pl-4 pr-50 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            onChange={(e) => setMedicationDetails({ ...medicationDetails, schedule: e.target.value })}
-                        >
-                            <option value="1">Once</option>
-                            <option value="2">TD</option>
-                            <option value="3">TTD</option>
-                            <option value="4">QD</option>
-                        </select>
-                    </MediColumn>
-                    <MediColumn label="Taking" columnFor="taking">
-                        <select
-                            defaultValue={"1"}
-                            title="taking"
-                            id="taking"
-                            className="block w-full rounded-md border-0 py-1.5 pl-4 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            onChange={(e) => setMedicationDetails({ ...medicationDetails, taking: e.target.value })}
-                        >
-                            <option value="1">AC</option>
-                            <option value="2">BC</option>
-                        </select>
-                    </MediColumn>
-                    <MediColumn label="Qty" columnFor="qty">
-                        <span>{medicationDetails.qty}</span>
-                    </MediColumn>
-                    <MediColumn label="Price" columnFor="price">
-                        <span>{medicationDetails.price}</span>
-                    </MediColumn>
-                </div>
-                <div className='p-4 grid md:grid-cols-7 pt-2 gap-4'>
-                    <div className='p-4 md:col-span-5 sm:col-span-7'>
+            <div className="grid md:grid-cols-7 gap-4">
+                <MedicationSelection onSelect={(selection) => setMedicationDetails({ ...medicationDetails, selection })} />
+                <MediColumn label="No of Days" columnFor="days">
+    <select
+        id="days"
+        className="input-field"
+        onChange={(e) => setMedicationDetails({ ...medicationDetails, days: parseInt(e.target.value, 10) })}
+        defaultValue="3" // Set the default value to "3"
+    >
+        <option value="1">Day 1</option>
+        <option value="2">Day 2</option>
+        <option value="3">Day 3</option> {/* Defaulted to Day 3 */}
+        <option value="4">Day 4</option>
+        <option value="5">Day 5</option>
+        <option value="6">Day 6</option>
+        <option value="7">Day 7</option>
+    </select>
+</MediColumn>
+
+
+                <MediColumn label="Schedule" columnFor="schedule">
+                    <select
+                        defaultValue="1"
+                        id="schedule"
+                        className="input-field"
+                        onChange={(e) => setMedicationDetails({ ...medicationDetails, schedule: e.target.value })}
+                    >
+                        <option value="1">Once</option>
+                        <option value="2">TD</option>
+                        <option value="3">TTD</option>
+                        <option value="4">QD</option>
+                    </select>
+                </MediColumn>
+                <MediColumn label="Taking" columnFor="taking">
+                    <select
+                        defaultValue="1"
+                        id="taking"
+                        className="input-field"
+                        onChange={(e) => setMedicationDetails({ ...medicationDetails, taking: e.target.value })}
+                    >
+                        <option value="1">AC</option>
+                        <option value="2">BC</option>
+                    </select>
+                </MediColumn>
+                <MediColumn label="Qty" columnFor="qty">
+                    <span>{medicationDetails.qty}</span>
+                </MediColumn>
+                <MediColumn label="Price" columnFor="price">
+                    <span>{medicationDetails.price}</span>
+                </MediColumn>
+            </div>
+            <div className="grid md:grid-cols-7 gap-4 p-4">
+            <div className='p-4 md:col-span-5 sm:col-span-7'>
                         <textarea
                             id="notes"
                             rows={4}
@@ -148,18 +148,17 @@ const newPage: React.FC = () => {
                             <div className="relative rounded-md shadow-sm md:pl-2 pb-2">300</div>
                         </div>
                         <div className='grid md:col-span-2 sm:col-span-2'>
-                            <button
-                                type="button"
-                                className="text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mt-5 mb-2 bg-blue-600 hover:bg-blue-700 outline-none focus:ring-blue-800"
-                                onClick={handleAdd}
-                            >
-                                Add
-                            </button>
+                        <button
+          className="text-blue-900 font-medium text-sm px-5 py-2.5 bg-blue-100 border border-black hover:bg-blue-300 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-800 transition duration-200"
+          onClick={handleAdd}
+        >
+          Add Medication
+        </button>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="overflow-x-auto">
+            
+                <div className="overflow-x-auto">
                 <table className="table-auto w-full border-collapse border border-gray-400">
                     <thead>
                         <tr className="bg-blue-200 text-blue-800">
@@ -205,12 +204,10 @@ const newPage: React.FC = () => {
     >
         Save Prescription
     </button>
-</div>
-
-
+                </div>
             </div>
         </div>
     );
 };
 
-export default newPage;
+export default NewPage;
