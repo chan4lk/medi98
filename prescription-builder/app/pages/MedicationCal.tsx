@@ -7,6 +7,7 @@ import MedicationSelection from "../../components/MedicationSelection";
 import jsPDF from "jspdf";
 
 
+
 interface TreatmentDetail {
   description: string;
   unitPrice: string;

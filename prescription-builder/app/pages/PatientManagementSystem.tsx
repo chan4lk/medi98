@@ -7,6 +7,7 @@ import jsPDF from 'jspdf';
 import React, { useState, useEffect } from 'react';
 
 
+
 interface MedicationDetails {
     selection: string;
     days: number;
